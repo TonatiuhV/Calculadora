@@ -12,8 +12,36 @@ export const CalculadoraScreen = () => {
   }
 
   const armarNumbero = (numberoTexto:string )=> {
+    //No aceptar multiples puntos
+    if(numberoTexto === '.' && numero.includes('.')) return;
     // Son string por lo que se concatenan
-    setNumero(numero+numberoTexto);
+    if(numero.startsWith("0") || numero.startsWith("-0")  ){
+       //permitimos punto
+      if(numberoTexto === '.'){
+        setNumero(numero+numberoTexto);
+         //permitimos multipes ceros cuando existe el punto
+      }else if(numberoTexto === '0' && numero.includes(".")){
+        setNumero(numero+numberoTexto); 
+        // Evaluamos que se sustituya el cero
+      }else if(numberoTexto !== '0' && !numero.includes(".") ){
+        setNumero(numberoTexto);
+      }else if(numberoTexto === '0'){
+        setNumero(numero);
+      }else{
+        setNumero(numero+numberoTexto);
+      }
+    }else{
+      setNumero(numero+numberoTexto);
+    }
+  }
+
+
+  const positivoNegativo = () =>{
+    if(numero.startsWith("-")){
+      setNumero(numero.replace("-",""));
+    }else{
+      setNumero("-"+numero);
+    }
   }
 
   return (
@@ -33,7 +61,7 @@ export const CalculadoraScreen = () => {
         {/* Fila boton */}
         <View style={styles.fila}>
           <BotonCalc texto="C" color="#9B9B9B" action={limpiar}/>
-          <BotonCalc texto="+/-" color="#9B9B9B" action={limpiar}/>
+          <BotonCalc texto="+/-" color="#9B9B9B" action={positivoNegativo}/>
           <BotonCalc texto="del" color="#9B9B9B" action={limpiar}/>
           <BotonCalc texto="/" color="#FF9427" action={limpiar}/>
         </View>
